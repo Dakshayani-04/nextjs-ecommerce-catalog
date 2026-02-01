@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextjs-ecommerce
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_API_URL=https://fakestoreapi.com
+      - NODE_ENV=production
+      - PORT=3000
+    healthcheck:
+      test: ['CMD', 'curl', '--fail', 'http://localhost:3000/api/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # Optional: For development with hot reload
+  # app-dev:
+  #   image: node:18-alpine
+  #   container_name: nextjs-ecommerce-dev
+  #   working_dir: /app
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - '3000:3000'
+  #   command: npm run dev
+  #   environment:
+  #     - NEXT_PUBLIC_API_URL=https://fakestoreapi.com
+  #     - NODE_ENV=development
